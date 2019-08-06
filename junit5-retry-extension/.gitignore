@@ -1,0 +1,8 @@
+.idea
+target
+allure-results
+*.iml
+.gradle/
+ajcore.*.txt
+*.orig
+build

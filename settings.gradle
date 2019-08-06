@@ -1,0 +1,5 @@
+rootProject.name = 'retry-flaky-tests'
+include 'junit4-custom-retry-runner'
+include 'kotlin-retry-wrapper'
+include 'junit5-retry-extension'
+
