@@ -1,9 +1,10 @@
-import core.retryableTest
+import core.RerunExtension
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.junit.jupiter.api.extension.ExtendWith
 
 @TestInstance(PER_CLASS)
-@DisplayName("Дожатие тестов с помощью обертки над тестом")
+@DisplayName("Дожатие тестов с помощью RerunExtension")
 class RetryableTest {
 
     private var tryCount = 0
@@ -28,19 +29,22 @@ class RetryableTest {
         println("AfterEach")
     }
 
-    @Test
-    fun failedTest() = retryableTest {
+    @TestTemplate
+    @ExtendWith(RerunExtension::class)
+    fun failedTest() {
         println("testFailed")
         throw Exception("FAIL")
     }
 
-    @Test
-    fun successTest() = retryableTest {
+    @TestTemplate
+    @ExtendWith(RerunExtension::class)
+    fun successTest() {
         println("testSuccess")
     }
 
-    @Test
-    fun successAfterRetryTest() = retryableTest {
+    @TestTemplate
+    @ExtendWith(RerunExtension::class)
+    fun successAfterRetryTest() {
         if (tryCount < 2) {
             tryCount++
             println("testFailed")
