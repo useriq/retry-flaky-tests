@@ -17,6 +17,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
     implementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
+    implementation("io.github.artsok:rerunner-jupiter:2.1.3")
 
 }
 

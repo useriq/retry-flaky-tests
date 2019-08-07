@@ -1,11 +1,12 @@
 package core
 
 import org.junit.jupiter.api.TestTemplate
-import org.junit.jupiter.api.extension.AfterTestExecutionCallback
 import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.api.extension.TestExecutionExceptionHandler
 import org.junit.jupiter.api.extension.TestTemplateInvocationContext
 import org.junit.jupiter.api.extension.TestTemplateInvocationContextProvider
 import org.junit.platform.commons.util.AnnotationUtils.isAnnotated
+import org.opentest4j.TestAbortedException
 import java.util.*
 import java.util.Spliterators.spliteratorUnknownSize
 import java.util.stream.Stream
@@ -13,9 +14,10 @@ import java.util.stream.StreamSupport.stream
 
 const val DEFAULT_RERUN_COUNT = 3
 
-class RerunExtension : TestTemplateInvocationContextProvider, AfterTestExecutionCallback {
+class RerunExtension : TestTemplateInvocationContextProvider, TestExecutionExceptionHandler {
 
     var isRunFailed = false
+    var currentRun = 0
 
     // set displayName for all test reruns
     lateinit var displayName: String
@@ -29,16 +31,15 @@ class RerunExtension : TestTemplateInvocationContextProvider, AfterTestExecution
         return isAnnotated(context.testMethod, TestTemplate::class.java)
     }
 
-    override fun afterTestExecution(context: ExtensionContext) {
-        if (context.executionException.isPresent) {
-            isRunFailed = true
-            println("Test run of ${context.displayName} failed")
-        } else isRunFailed = false
+    override fun handleTestExecutionException(context: ExtensionContext, throwable: Throwable) {
+        isRunFailed = true
+        println("Test run of ${context.displayName} failed")
+        if ((isRunFailed && currentRun < DEFAULT_RERUN_COUNT)) {
+            throw TestAbortedException("sdfsdf")
+        }
     }
 
     inner class TestTemplateIterator : Iterator<TestTemplateInvocationContext> {
-        var currentRun = 0
-
         override fun hasNext(): Boolean {
             return if (currentRun == 0) {
                 return true
