@@ -1,5 +1,13 @@
 package main.groovy.pipelines
 
+library changelog: false,
+        identifier: 'shared-lib@master',
+        retriever: modernSCM([
+                $class       : 'GitSCMSource',
+                remote       : 'ssh://git@bitbucket.ru/qa/jenkins-groovy-scripts.git'])
+
+assert runId != null
+
 pipeline {
     agent {
         label any
@@ -8,10 +16,7 @@ pipeline {
     stages {
         stage("start test") {
             steps {
-                build job: 'QA/TestJob',
-                        parameters: [string(name: 'threadsCount', value: threadsCount),
-                                     string(name: 'runId', value: runId),
-                                     string(name: 'testList', value: testList)]
+              testsWithRerun(runId: runId)
             }
         }
     }
