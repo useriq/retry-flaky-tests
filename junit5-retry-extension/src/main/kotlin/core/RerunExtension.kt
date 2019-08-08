@@ -36,6 +36,8 @@ class RerunExtension : TestTemplateInvocationContextProvider, TestExecutionExcep
         println("Test run of ${context.displayName} failed")
         if ((isRunFailed && currentRun < DEFAULT_RERUN_COUNT)) {
             throw TestAbortedException("Skip failed retry")
+        }else if (isRunFailed) {
+            throw throwable
         }
     }
 
