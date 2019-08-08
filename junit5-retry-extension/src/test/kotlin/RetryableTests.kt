@@ -1,5 +1,4 @@
 import core.RerunExtension
-import io.github.artsok.RepeatedIfExceptionsTest
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.extension.ExtendWith
